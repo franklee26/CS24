@@ -5,10 +5,11 @@
 #include <cassert>
 #include <string>
 #include "words2.h"
+#include <iostream>
 
 using std::string;
 
-namespace lab03_2
+namespace lab04_2
 {
     Words::Words(unsigned int initial_capacity) {
         capacity=initial_capacity;
@@ -52,22 +53,24 @@ namespace lab03_2
 
     void Words::append(string word) {
         if (used==capacity){
-            string* copydata=data;
-            unsigned int orglen=used;
-            delete [] data;
-            capacity=capacity*2;
-            data=new string[capacity];
-            unsigned int i=0;
-            while (i<orglen){
-                data[i]=copydata[i];
-                i++;
-            }
-           used=orglen;
-           data[used]=word;
-           used++;
-        } else{
+	  capacity=2*capacity;
+	  unsigned int oldsize=used;
+	  string oldcopy[used];
+	  for (int i=0; i<used; i++){
+	    oldcopy[i]=data[i];
+	  }
+	  delete [] data;
+	  data=new string[capacity];
+	  unsigned int i=0;
+	  while (i<oldsize){
+	    data[i]=oldcopy[i];
+	    i++;
+	  }
+	  data[oldsize]=word;
+	  used=oldsize+1;
+        } else if (used<capacity){
             data[used] = word;
-            ++used;
+            used++;
         }
     }
     
